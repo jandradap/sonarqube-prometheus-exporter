@@ -5,7 +5,8 @@ WORKDIR /sonarqube_exporter/
 COPY . .
 
 # hadolint ignore=DL3041
-RUN microdnf install -y python3 python3-pip && \
+RUN microdnf upgrade -y && \
+    install -y python3 python3-pip && \
     microdnf clean all
 
 RUN pip3 install --no-cache-dir -r requirements.txt
