@@ -8,6 +8,7 @@ docker run -d \
 -p8198:8198 \
 -eSONARQUBE_SERVER='http://sonarqube_server:PORT' \
 -eSONARQUBE_TOKEN='squ_af1e521e19aef5c5de1cb6df89adf3cbb3a9759e' \
+-eEXPORTER_POLLING_INTERVAL=30 \
 return200/sonarqube-exporter:latest
 ```
 Access `localhost:8198`
