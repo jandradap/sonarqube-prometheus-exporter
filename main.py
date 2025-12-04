@@ -15,16 +15,17 @@ sonarqube_server = os.environ.get('SONARQUBE_SERVER', 'http://192.168.3.101:9001
 sonarqube_token = os.environ.get('SONARQUBE_TOKEN', 'squ_af1e521e19aef5c5de1cb6df89adf3cbb3a9759e')
 exporter_listen_host = os.environ.get('EXPORTER_LISTEN_HOST', '0.0.0.0')
 exporter_listen_port = os.environ.get('EXPORTER_LISTEN_PORT', 8198)
+exporter_polling_interval = int(os.environ.get('EXPORTER_POLLING_INTERVAL', 30))
 
 
-def schedule(minutes, task):
+def schedule(seconds, task):
     # A function that will run the task every minute.
     while True:
         try:
             tic = time.time()
             task()
             duration = time.time() - tic
-            sleep_time = max(60 * minutes - int(duration), 1)
+            sleep_time = max(seconds - int(duration), 1)
             print("Sleeping %d seconds" % sleep_time)
             time.sleep(max(sleep_time, 0))
         except (KeyboardInterrupt, SystemExit) as e:
@@ -66,7 +67,7 @@ def exporter_start():
     # Starting the http server and scheduling the metrics_task to run every minute.
     try:
         start_http_server(exporter_listen_port, addr=exporter_listen_host)
-        schedule(minutes=1, task=metrics_task)
+        schedule(seconds=exporter_polling_interval, task=metrics_task)
     except (KeyboardInterrupt, SystemExit) as error:
         print(error)
 
